@@ -59,7 +59,7 @@ Create a function `def pascal_triangle(n)`: that returns a list of lists of inte
 
 ```sh
 
-guillaume@ubuntu:~/0x00$ cat 0-main.py
+stevecmd@stevecmd:~/0x00$ cat 0-main.py
 #!/usr/bin/python3
 """
 0-main
@@ -77,8 +77,8 @@ def print_triangle(triangle):
 if __name__ == "__main__":
     print_triangle(pascal_triangle(5))
 
-guillaume@ubuntu:~/0x00$ 
-guillaume@ubuntu:~/0x00$ ./0-main.py
+stevecmd@stevecmd:~/0x00$ 
+stevecmd@stevecmd:~/0x00$ ./0-main.py
 [1]
 [1,1]
 [1,2,1]
