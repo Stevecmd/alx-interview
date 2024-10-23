@@ -10,37 +10,38 @@ import sys
 def print_stats(total_size, status_codes):
     """Prints the computed metrics"""
     print("File size: {}".format(total_size))
-    for key in sorted(status.keys()):
-        if status[key] > 0:
-            print("{}: {}".format(key, status[key]))
+    for key in sorted(status_codes.keys()):
+        if status_codes[key] > 0:
+            print("{}: {}".format(key, status_codes[key]))
 
 
-split = []
 total_size = 0
 status_codes = {
-    200: 0,
-    301: 0,
-    400: 0,
-    401: 0,
-    403: 0,
-    404: 0,
-    405: 0,
-    500: 0,
+    "200": 0,
+    "301": 0,
+    "400": 0,
+    "401": 0,
+    "403": 0,
+    "404": 0,
+    "405": 0,
+    "500": 0,
 }
 
 try:
     for i, line in enumerate(sys.stdin, 1):
-        split = line.split(" ")
-        if len(split) < 2:
+        parts = line.split()
+        if len(parts) < 7:
             continue
-        if split[-2] in status:
-            status[split[-2]] = status[split[-2]] + 1
-        file_size = file_size + eval(split[-1])
+        status_code = parts[-2]
+        file_size = parts[-1]
+        if status_code in status_codes:
+            status_codes[status_code] += 1
+        try:
+            total_size += int(file_size)
+        except ValueError:
+            continue
         if i % 10 == 0:
-            print("File size: {}".format(file_size))
-            for key in sorted(status.keys()):
-                if status[key] > 0:
-                    print("{}: {}".format(key, status[key]))
+            print_stats(total_size, status_codes)
 
 except KeyboardInterrupt:
     print_stats(total_size, status_codes)
