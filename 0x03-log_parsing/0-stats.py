@@ -6,46 +6,43 @@ Usage: ./0-stats.py
 import sys
 
 
-def print_stats(total_size, status_codes):
-    """Prints the computed metrics"""
-    print("File size: {}".format(total_size))
-    for code in sorted(status_codes.keys()):
-        if status_codes[code] > 0:
-            print("{}: {}".format(code, status_codes[code]))
+if __name__ == '__main__':
 
+    # Variable initialization
+    total_file_size, line_count = 0, 0
+    status_codes = ["200", "301", "400", "401", "403", "404", "405", "500"]
+    stats = {code: 0 for code in status_codes}
 
-def process_logs():
-    """Processes HTTP request logs from stdin"""
-    total_size = 0
-    status_codes = {"200": 0, "301": 0, "400": 0, "401": 0,
-                    "403": 0, "404": 0, "405": 0, "500": 0}
+    def print_stats(stats: dict, total_file_size: int) -> None:
+        """Prints statistics of HTTP request logs.
+
+        Args:
+            stats (dict): A dictionary with HTTP status codes as keys and
+                their respective counts as values.
+            file_size (int): The total size of the log file in bytes.
+        """
+        print("File size: {:d}".format(total_file_size))
+        for status_code, count in sorted(stats.items()):
+            if count:
+                print("{}: {}".format(status_code, count))
 
     try:
-        for i, line in enumerate(sys.stdin, 1):
-            parts = line.split()
-            if len(parts) < 2:
-                continue
-
-            status_code = parts[-2]
-            file_size = parts[-1]
-
-            if status_code in status_codes:
-                status_codes[status_code] += 1
-
+        for line in sys.stdin:
+            line_count += 1
+            data = line.split()
             try:
-                total_size += int(file_size)
-            except ValueError:
-                continue
-
-            if i % 10 == 0:
-                print_stats(total_size, status_codes)
-
+                status_code = data[-2]
+                if status_code in stats:
+                    stats[status_code] += 1
+            except BaseException:
+                pass
+            try:
+                total_file_size += int(data[-1])
+            except BaseException:
+                pass
+            if line_count % 10 == 0:
+                print_stats(stats, total_file_size)
+        print_stats(stats, total_file_size)
     except KeyboardInterrupt:
-        print_stats(total_size, status_codes)
+        print_stats(stats, total_file_size)
         raise
-
-    print_stats(total_size, status_codes)
-
-
-if __name__ == "__main__":
-    process_logs()
