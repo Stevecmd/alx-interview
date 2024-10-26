@@ -52,7 +52,7 @@ try:
             pass
 
         if line_count % 10 == 0:
-            print_msg(stats, total_file_size)
+            print_stats(stats, total_file_size)
             line_count = 0
 
     print_stats(stats, total_file_size)
