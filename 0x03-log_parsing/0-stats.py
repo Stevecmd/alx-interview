@@ -10,7 +10,7 @@ def print_stats(stats, total_file_size):
     """Prints statistics of HTTP request logs.
 
     Args:
-        stats (dict): A dictionary with HTTP status codes as keys and
+        stats (dict): Dictionary with HTTP status codes as keys and
             their respective counts as values.
         file_size (int): The total size of the log file in bytes.
     """
