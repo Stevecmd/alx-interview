@@ -12,33 +12,6 @@ same row, column, or diagonal.
 """
 
 
-def nqueens(size, row, queens):
-    """
-    Recursively solves the N Queens problem using backtracking.
-
-    Args:
-        size (int): The size of the chessboard (N).
-        row (int): The current row being processed.
-        queens (list): List of coordinates for placed queens.
-
-    This function attempts to place queens on the board one row at a time,
-    checking for valid positions and backtracking when necessary.
-    """
-    if row == size:
-        # When we reach size, we've found a valid solution
-        print(queens)
-        return
-
-    for col in range(size):
-        # Check if the current position is safe
-        if is_safe(queens, row, col):
-            queens.append([row, col])
-            # Recursively try to place queens in next rows
-            nqueens(size, row + 1, queens)
-            # Backtrack by removing the queen we just placed
-            queens.pop()
-
-
 def is_safe(queens, row, col):
     """
     Checks if a queen can be placed on the board at the given position.
@@ -53,11 +26,34 @@ def is_safe(queens, row, col):
     """
     for queen in queens:
         # Check if the position conflicts with any existing queen
-        if (col == queen[1] or      # Same column
-                row - col == queen[0] - queen[1] or  # Same diagonal
-                row + col == queen[0] + queen[1]):  # Same reverse diagonal
+        if (col == queen[1] or
+                row - col == queen[0] - queen[1] or
+                col - queen[1] == queen[0] - row):
             return False
     return True
+
+
+def nqueens(size, row, queens):
+    """
+    Recursively solves the N Queens problem using backtracking.
+
+    Args:
+        size (int): The size of the chessboard (N).
+        row (int): The current row being processed.
+        queens (list): List of coordinates for placed queens.
+
+    This function attempts to place queens on the board one row at a time,
+    checking for valid positions and backtracking when necessary.
+    """
+    for col in range(size):
+        # Check if the current position is safe
+        if is_safe(queens, row, col):
+            queens.append([row, col])
+            if row == size - 1:
+                print(queens)
+            else:
+                nqueens(size, row + 1, queens)
+            queens.pop()
 
 
 def main():
