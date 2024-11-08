@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Solves the N Queens problem"""
+"""0x05. N Queens"""
 import sys
 
 """
