@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """
 0x05. N Queens
-
 This module solves the N Queens problem,
 which involves placing N non-attacking
 queens on an N×N chessboard.
@@ -73,7 +72,7 @@ def solve_nqueens_util(board, row, n):
 
 def main():
     """
-    Main function to handle command-line arguments and solve N-Queens
+    Main function: Handles command-line arguments and solve N-Queens
     """
     if len(sys.argv) != 2:
         print("Usage: nqueens N")
