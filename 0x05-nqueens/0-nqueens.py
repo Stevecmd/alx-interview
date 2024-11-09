@@ -11,73 +11,85 @@ same row, column, or diagonal.
 import sys
 
 
-def is_safe(queens, row, col):
+def is_safe(board, row, col, n):
     """
-    Checks if a queen can be placed on the board at the given position.
+    Check if a queen can be placed on board[row][col]
 
     Args:
-        queens (list): Current queen positions on the board.
-        row (int): Row to check.
-        col (int): Column to check.
+        board (list): The current board configuration
+        row (int): Row to check
+        col (int): Column to check
+        n (int): Size of the board
 
     Returns:
-        bool: True if the position is safe, False otherwise.
+        bool: True if the position is safe, False otherwise
     """
-    for queen in queens:
-        # Check if the position conflicts with any existing queen
-        if (col == queen[1] or
-                row - col == queen[0] - queen[1] or
-                col - queen[1] == queen[0] - row):
-            return False
+    # Check this row on left side
+    if col in board:
+        return False
+
+    # Check upper diagonal on left side
+    for i, j in enumerate(board):
+        if j != -1:
+            if abs(row - i) == abs(col - j):
+                return False
+
     return True
 
 
-def nqueens(size, row, queens):
+def solve_nqueens(n):
     """
-    Recursively solves the N Queens problem using backtracking.
+    Solve the N Queens problem and print all solutions
 
     Args:
-        size (int): The size of the chessboard (N).
-        row (int): The current row being processed.
-        queens (list): List of coordinates for placed queens.
-
-    This function attempts to place queens on the board one row at a time,
-    checking for valid positions and backtracking when necessary.
+        n (int): Size of the board and number of queens
     """
-    for col in range(size):
-        # Check if the current position is safe
-        if is_safe(queens, row, col):
-            queens.append([row, col])
-            if row == size - 1:
-                print(queens)
-            else:
-                nqueens(size, row + 1, queens)
-            queens.pop()
+    board = [-1] * n
+    solve_nqueens_util(board, 0, n)
+
+
+def solve_nqueens_util(board, row, n):
+    """
+    Utility function to solve N Queens problem using backtracking
+
+    Args:
+        board (list): Current board configuration
+        row (int): Current row being processed
+        n (int): Size of the board
+    """
+    if row == n:
+        solution = []
+        for i in range(n):
+            solution.append([i, board[i]])
+        print(solution)
+        return
+
+    for col in range(n):
+        if is_safe(board, row, col, n):
+            board[row] = col
+            solve_nqueens_util(board, row + 1, n)
+            board[row] = -1
 
 
 def main():
     """
-    Main function to handle command-line arguments and solve N-Queens.
-
-    It checks for the correct number of arguments, validates the input,
-    and calls the solve_nqueens function to find solutions.
+    Main function to handle command-line arguments and solve N-Queens
     """
     if len(sys.argv) != 2:
         print("Usage: nqueens N")
         sys.exit(1)
 
     try:
-        size = int(sys.argv[1])
+        n = int(sys.argv[1])
     except ValueError:
         print("N must be a number")
         sys.exit(1)
 
-    if size < 4:
+    if n < 4:
         print("N must be at least 4")
         sys.exit(1)
 
-    # Start the recursive solution with an empty list of queens
-    nqueens(size, 0, [])
+    solve_nqueens(n)
 
 
 if __name__ == "__main__":
