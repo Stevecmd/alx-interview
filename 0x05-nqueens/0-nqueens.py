@@ -1,7 +1,4 @@
 #!/usr/bin/python3
-"""0x05. N Queens"""
-import sys
-
 """
 0x05. N Queens
 
@@ -11,6 +8,7 @@ queens on an N×N chessboard.
 A solution requires that no two queens share the
 same row, column, or diagonal.
 """
+import sys
 
 
 def is_safe(queens, row, col):
