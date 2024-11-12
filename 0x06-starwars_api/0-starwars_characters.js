@@ -1,18 +1,15 @@
 #!/usr/bin/node
-
 // Fetches and prints all characters of a Star Wars movie
 const request = require('request');
-
 // Get the movie ID passed as command line argument
 const movieId = process.argv[2];
+// Construct the API URL for the given movie ID
+const url = `https://swapi-api.alx-tools.com/api/films/${movieId}/`;
 
 if (!movieId) {
   console.log('Usage: ./0-starwars_characters.js <Movie ID>');
   process.exit(1);
 }
-
-// Construct the API URL for the given movie ID
-const url = `https://swapi-api.alx-tools.com/api/films/${movieId}/`;
 
 request(url, async (error, response, body) => {
   // Check for request error
