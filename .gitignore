@@ -1,2 +1,4 @@
 __pycache__/*
 *.pyc
+.package-lock.json
+0x06-starwars_api/node_modules/*
