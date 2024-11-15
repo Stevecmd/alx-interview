@@ -1,6 +1,6 @@
 #!/usr/bin/node
 const request = require('request');
-const movieId = process.argv[2];
+const movieId = process.argv.splice(2);
 
 const url = `https://swapi-api.alx-tools.com/api/films/${movieId}/`;
 
@@ -9,33 +9,31 @@ if (!movieId) {
   process.exit(1);
 }
 
-request(url, (error, response, body) => {
+request(url, async (error, response, body) => {
   // Check for request error
   if (error) {
-    console.error('Error:', error);
-    return;
+    console.error('Error:', error); // Log error to console
+    return; // Exit function if error occurs
   }
 
   // Check if the response status code indicates a successful request
   if (response.statusCode !== 200) {
-    console.error('Failed to fetch movie:', response.statusCode);
-    return;
+    console.error('Failed to fetch movie:', response.statusCode); // Log failure message with status code
+    return; // Exit function if the request was unsuccessful
   }
 
   const film = JSON.parse(body);
   const characters = film.characters;
 
-  // Create an array of promises for fetching character names
-  const characterPromises = characters.map(characterUrl => getCharacterName(characterUrl));
-
-  // Wait for all promises to resolve
-  Promise.all(characterPromises)
-    .then(names => {
-      names.forEach(name => console.log(name)); // Print each character name
-    })
-    .catch(err => {
-      console.error('Error fetching character names:', err);
-    });
+  // Iterate over the characters API URLs
+  for (const characterUrl of characters) {
+    try {
+      const characterName = await getCharacterName(characterUrl);
+      console.log(characterName);
+    } catch (err) {
+      console.error('Error:', err);
+    }
+  }
 });
 
 // Function to fetch character name from API URL
